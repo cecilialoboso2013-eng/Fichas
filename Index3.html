@@ -1,0 +1,100 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Probabilidad con fichas de colores</title><style>
+:root{
+ --bg:#f4f7fb;--card:#fff;--ink:#172235;--muted:#667085;--line:#dbe3ec;
+ --blue:#194f86;--blue2:#2d70b5;--green:#1f7352;--red:#a33a3a;--gold:#a76516;
+ --soft:#eef4fb;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Calibri,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(135deg,#173d68,#276aa7);color:#fff;padding:24px 18px}
+.header-inner{max-width:1200px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:18px}
+h1{margin:0;font-size:29px}.sub{margin-top:6px;opacity:.92}
+.grade{background:#ffffff1a;border:1px solid #ffffff48;border-radius:11px;padding:10px 13px;font-weight:700}
+main{max-width:1200px;margin:20px auto 50px;padding:0 18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:17px;box-shadow:0 4px 15px #1128410e}
+.card h2{margin:0 0 10px;font-size:21px}.card h3{margin:16px 0 8px}
+.note{background:#eef6ff;border-left:4px solid #4386c5;padding:10px 12px;border-radius:8px;line-height:1.45;font-size:14px}
+.formula{font-size:20px;font-weight:800;text-align:center;padding:12px;background:#f4f8fc;border:1px solid #dbe7f3;border-radius:11px;margin:10px 0}
+label{font-weight:700;font-size:14px;display:block;margin:8px 0 5px}
+input,select,button{font:inherit}
+input,select{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:9px;background:#fff}
+button{border:0;border-radius:9px;padding:10px 13px;font-weight:700;cursor:pointer}
+.primary{background:var(--blue);color:#fff}.secondary{background:#e7eef6;color:#244668}
+.good{background:var(--green);color:#fff}.gold{background:#f5ead8;color:#845315}.danger{background:#f9e5e5;color:#922f2f}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.stat{background:#f8fafc;border:1px solid var(--line);border-radius:11px;padding:10px;text-align:center}
+.stat span{font-size:12px;color:var(--muted)}.stat strong{display:block;font-size:21px;margin-top:3px}
+.prob{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:10px}
+.prob-row{display:flex;justify-content:space-between;gap:12px;padding:9px 11px;border-bottom:1px solid #edf1f5}
+.prob-row:last-child{border-bottom:0}.prob-row strong{font-size:18px}
+.result-box{font-size:26px;font-weight:800;text-align:center;padding:16px;border:1px solid var(--line);border-radius:13px;background:#fff}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px;border-bottom:1px solid #edf1f5;text-align:center}
+th{background:#f1f5f9}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:11px;max-height:320px}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:9px}
+.feedback.ok{display:block;background:#e7f5ed;color:#175f43;border:1px solid #b9dec9}
+.feedback.bad{display:block;background:#fdeaea;color:#8c2e2e;border:1px solid #efc3c3}
+.small{font-size:13px;color:var(--muted);line-height:1.45}
+.outcomes{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}
+.pill{padding:7px 10px;border-radius:999px;background:#edf3f8;border:1px solid #d8e1ea;cursor:pointer}
+.pill.active{background:#d9e9fb;border-color:#78a9dc;color:#173e70;font-weight:800}
+.die{width:110px;height:110px;border-radius:18px;background:#fff;border:3px solid #233f5f;display:grid;place-items:center;font-size:62px;font-weight:800;margin:8px auto;box-shadow:0 4px 12px #0002}
+.coin{width:120px;height:120px;border-radius:50%;border:6px solid #a97917;background:#f7d86a;display:grid;place-items:center;font-size:24px;font-weight:800;margin:8px auto;box-shadow:inset 0 0 0 5px #fff3,0 5px 15px #0002}
+.balls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.ball{width:38px;height:38px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #bbb}
+footer{max-width:1200px;margin:auto;padding:0 18px 35px;color:var(--muted);font-size:13px}
+a.back{color:#fff;text-decoration:none;font-weight:700}
+@media(max-width:850px){.grid{grid-template-columns:1fr}.row,.stats{grid-template-columns:1fr}.header-inner{flex-direction:column;align-items:flex-start}}
+</style></head><body>
+<header><div class="header-inner"><div><a class="back" href="index.html">← Volver al menú</a><h1>Probabilidad con fichas de colores</h1><div class="sub">Configura la bolsa y calcula probabilidades con la regla de Laplace.</div></div><div class="grade">Matemática · 7.º Básico</div></div></header>
+<main>
+<div class="grid">
+<section class="card">
+<h2>Bolsa de fichas de colores</h2>
+<div class="note">Configura cuántas fichas de cada color hay. Cada ficha individual tiene la misma posibilidad de ser extraída.</div>
+<div class="row"><div><label>Rojas</label><input id="red" type="number" min="0" value="4" oninput="build()"></div><div><label>Azules</label><input id="blue" type="number" min="0" value="3" oninput="build()"></div></div>
+<div class="row"><div><label>Verdes</label><input id="green" type="number" min="0" value="2" oninput="build()"></div><div><label>Amarillas</label><input id="yellow" type="number" min="0" value="1" oninput="build()"></div></div>
+<h3>Fichas en la bolsa</h3><div class="balls" id="balls"></div>
+<label>Evento</label><select id="event" onchange="calc()"><option value="red">Sacar una ficha roja</option><option value="blue">Sacar una ficha azul</option><option value="green">Sacar una ficha verde</option><option value="yellow">Sacar una ficha amarilla</option><option value="notred">Sacar una ficha que no sea roja</option></select>
+<div class="prob"><div class="prob-row"><span>Casos favorables</span><strong id="fav">—</strong></div><div class="prob-row"><span>Casos posibles</span><strong id="tot">—</strong></div><div class="prob-row"><span>Fracción</span><strong id="fraction">—</strong></div><div class="prob-row"><span>Decimal</span><strong id="decimal">—</strong></div><div class="prob-row"><span>Porcentaje</span><strong id="percent">—</strong></div><div class="prob-row"><span>Interpretación</span><strong id="qual">—</strong></div></div>
+</section>
+<section class="card">
+<h2>Extracción experimental</h2>
+<div id="pick" class="result-box">Resultado: —</div>
+<button class="primary" style="width:100%;margin-top:10px" onclick="pick()">Extraer una ficha</button>
+<div class="stats"><div class="stat"><span>Extracciones</span><strong id="spins">0</strong></div><div class="stat"><span>Éxitos</span><strong id="hits">0</strong></div><div class="stat"><span>Experimental</span><strong id="exp">0%</strong></div></div>
+<p class="small">La simulación usa reposición: después de cada extracción, la ficha vuelve a la bolsa.</p>
+</section>
+</div></main><footer>Probabilidad teórica mediante regla de Laplace y comparación con probabilidad experimental.</footer>
+<script>
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a||1}
+function frac(f,t){const g=gcd(f,t);return `${f/g}/${t/g}`}
+function dec(v){return v.toFixed(4).replace(/0+$/,'').replace(/\.$/,'').replace('.',',')}
+function pct(v){return (v*100).toFixed(2).replace(/0+$/,'').replace(/\.$/,'').replace('.',',')+'%'}
+function interpretation(p){if(p===0)return'Imposible';if(p===1)return'Seguro';if(p===0.5)return'Igualmente probable';if(p<0.5)return'Poco probable';return'Muy probable'}
+function setProb(f,t){
+ const p=t?f/t:0;
+ document.getElementById('fav').textContent=f;
+ document.getElementById('tot').textContent=t;
+ document.getElementById('fraction').textContent=t?frac(f,t):'—';
+ document.getElementById('decimal').textContent=t?dec(p):'—';
+ document.getElementById('percent').textContent=t?pct(p):'—';
+ const q=document.getElementById('qual'); if(q) q.textContent=t?interpretation(p):'—';
+ return p;
+}
+function parseNum(s){return parseFloat(String(s).replace('%','').replace(',','.').trim())}
+
+
+let bag=[],n=0,hits=0;const colors={red:['Roja','#d94a4a'],blue:['Azul','#4d77d9'],green:['Verde','#46a46d'],yellow:['Amarilla','#e0b832']};
+function build(){bag=[];for(const k of Object.keys(colors)){const c=Math.max(0,parseInt(document.getElementById(k).value)||0);for(let i=0;i<c;i++)bag.push(k)}const box=document.getElementById('balls');box.innerHTML='';bag.forEach(k=>box.innerHTML+=`<span class="ball" style="background:${colors[k][1]}"></span>`);n=0;hits=0;calc();update()}
+function cond(k){const e=document.getElementById('event').value;return e==='notred'?k!=='red':k===e}
+function calc(){setProb(bag.filter(cond).length,bag.length)}
+function pick(){if(!bag.length)return;const k=bag[Math.floor(Math.random()*bag.length)];document.getElementById('pick').textContent='Resultado: '+colors[k][0];n++;if(cond(k))hits++;update()}
+function update(){document.getElementById('spins').textContent=n;document.getElementById('hits').textContent=hits;document.getElementById('exp').textContent=n?pct(hits/n):'0%'}
+build();
+</script></body></html>
